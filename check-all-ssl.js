@@ -14,7 +14,7 @@ const LIST_OF_DOMAINS = [
 ];
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const port = 443;
-const gracetime_days = 14;
+const gracetime_days = 10;
 
 LIST_OF_DOMAINS.forEach(domain => {
   const options = {
@@ -37,7 +37,7 @@ LIST_OF_DOMAINS.forEach(domain => {
         status = `WARNING - ${domain} - expires in ${remaining} days (on ${valid_to.toISOString()})`;
       }
 
-      if (remaining > gracetime_days) { // Discord message will be sent for warning and critical status.
+      if (remaining < gracetime_days) { // Discord message will be sent for warning and critical status.
         const payload = { content: status };
 
         request.post(DISCORD_WEBHOOK_URL, {
