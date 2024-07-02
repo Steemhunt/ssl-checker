@@ -60,3 +60,6 @@ LIST_OF_URLS.forEach((urlString) => {
 
   req.end();
 });
+
+// crontab
+//* * * * * cd /home/updatebot/ssl-checker && node check-urls.js >> /home/updatebot/ssl-checker/cron-urls.log 2>&1
