@@ -9,7 +9,7 @@ function format(date) {
   return date.toLocaleString("sv-SE");
 }
 
-const LIST_OF_URLS = ["https://tip.hunt.town/allowance/stats/8151"];
+const LIST_OF_URLS = ["https://tip.hunt.town/allowance/stats/8151/{timestamp}"];
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const port = 443;
 
@@ -35,11 +35,11 @@ function onError(url, msg) {
 
 LIST_OF_URLS.forEach((urlString) => {
   const timestamp = Date.now();
-  const parsedUrl = new URL(urlString);
+  const parsedUrl = new URL(urlString.replace("{timestamp}", timestamp));
 
   const options = {
     host: parsedUrl.hostname, // Extract hostname
-    path: parsedUrl.pathname + `/${timestamp}`, // Extract path with query
+    path: parsedUrl.pathname, // Extract path with query
     port: port,
     method: "GET",
   };
@@ -47,7 +47,7 @@ LIST_OF_URLS.forEach((urlString) => {
   const req = https.request(options, (response) => {
     // Check URL returns 200
     if (response.statusCode === 200) {
-      console.log(`OK - ${urlString}`);
+      console.log(`OK - ${parsedUrl}`);
     } else {
       onError(urlString, `Status code: ${response.statusCode}`);
     }
