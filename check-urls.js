@@ -23,7 +23,7 @@ function onError(url, msg) {
     DISCORD_WEBHOOK_URL,
     {
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ content: status }),
+      body: JSON.stringify({ content: `<@&1031483102247264326> ${status}` }),
     },
     (error) => {
       if (error) {
