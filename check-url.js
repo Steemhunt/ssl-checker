@@ -34,10 +34,13 @@ function onError(url, msg) {
 }
 
 LIST_OF_URLS.forEach((urlString) => {
+  const timestamp = Date.now();
   const parsedUrl = new URL(urlString);
+  parsedUrl.searchParams.append("_checker", timestamp);
+
   const options = {
     host: parsedUrl.hostname, // Extract hostname
-    path: parsedUrl.pathname, // Extract path
+    path: parsedUrl.pathname + parsedUrl.search, // Extract path with query
     port: port,
     method: "GET",
   };
