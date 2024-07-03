@@ -47,14 +47,31 @@ LIST_OF_URLS.forEach((urlString) => {
   const req = https.request(options, (response) => {
     // Check URL returns 200
     if (response.statusCode === 200) {
-      console.log(`OK - ${parsedUrl}`);
+      // Check response file size
+      let data = [];
+      response.on("data", (chunk) => {
+        data.push(chunk);
+      });
+
+      response.on("end", () => {
+        const fileSize = Buffer.concat(data).length;
+
+        if (fileSize < 10) {
+          onError(
+            parsedUrl,
+            `Status code: ${response.statusCode} | File size: ${fileSize}`
+          );
+        } else {
+          console.log(`OK - ${parsedUrl} | size: ${fileSize}`);
+        }
+      });
     } else {
-      onError(urlString, `Status code: ${response.statusCode}`);
+      onError(parsedUrl, `Status code: ${response.statusCode}`);
     }
   });
 
   req.on("error", (error) => {
-    onError(urlString, `Connection Error: ${error.message}`);
+    onError(parsedUrl, `Connection Error: ${error.message}`);
   });
 
   req.end();
