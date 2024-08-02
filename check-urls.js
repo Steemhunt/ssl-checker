@@ -9,6 +9,10 @@ function format(date) {
   return date.toLocaleString("sv-SE");
 }
 
+async function sleep(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 const LIST_OF_URLS = ["https://tip.hunt.town/allowance/stats/8151/{timestamp}"];
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const port = 443;
@@ -33,7 +37,7 @@ function onError(url, msg) {
   );
 }
 
-LIST_OF_URLS.forEach((urlString) => {
+async function checkUrl(urlString, retryCount = 0) {
   const timestamp = Date.now();
   const parsedUrl = new URL(urlString.replace("{timestamp}", timestamp));
 
@@ -44,7 +48,7 @@ LIST_OF_URLS.forEach((urlString) => {
     method: "GET",
   };
 
-  const req = https.request(options, (response) => {
+  const req = https.request(options, async (response) => {
     // Check URL returns 200
     if (response.statusCode === 200) {
       // Check response file size
@@ -66,7 +70,16 @@ LIST_OF_URLS.forEach((urlString) => {
         }
       });
     } else {
-      onError(parsedUrl, `Status code: ${response.statusCode}`);
+      if (retryCount < 1) {
+        await sleep(5000); // wait for 5 secs
+        console.log(
+          `Failed with Status code: ${response.statusCode} - Retrying ${urlString} in 5 secs...`
+        );
+
+        checkUrl(urlString, retryCount + 1);
+      } else {
+        onError(parsedUrl, `Status code: ${response.statusCode}`);
+      }
     }
   });
 
@@ -75,6 +88,10 @@ LIST_OF_URLS.forEach((urlString) => {
   });
 
   req.end();
+}
+
+LIST_OF_URLS.forEach((urlString) => {
+  checkUrl(urlString);
 });
 
 // crontab
