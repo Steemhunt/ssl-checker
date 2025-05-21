@@ -18,7 +18,8 @@ const LIST_OF_DOMAINS = [
   'hrl.sh',
   'barkapp.co',
   'neverlose.money',
-  'gudoks.com'
+  'pumpsea.io',
+  'hyped.club'
 ];
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const port = 443;
