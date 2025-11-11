@@ -13,13 +13,14 @@ const LIST_OF_DOMAINS = [
   'nomadtask.com',
   'steemhunt.com',
   'dixel.club',
-  'dixelclub.com',
   'mint.club',
   'hrl.sh',
   'barkapp.co',
   'neverlose.money',
   'pumpsea.io',
-  'hyped.club'
+  'hyped.club',
+  'sebayaki.com',
+  'signet.sebayaki.com'
 ];
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const port = 443;
