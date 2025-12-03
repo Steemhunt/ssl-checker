@@ -13,7 +13,7 @@ async function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-const LIST_OF_URLS = ["https://tip.hunt.town/allowance/stats/8151/{timestamp}"];
+const LIST_OF_URLS = ["https://hunt.town", "https://mint.club"];
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const port = 443;
 
