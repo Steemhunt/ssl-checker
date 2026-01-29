@@ -1,26 +1,25 @@
 #!/usr/bin/env node
 
-const https = require('https');
-const request = require('request');
-require('dotenv').config();
+const https = require("https");
+const request = require("request");
+require("dotenv").config();
 
 function format(date) {
-  return date.toLocaleString('sv-SE');
+  return date.toLocaleString("sv-SE");
 }
 
 const LIST_OF_DOMAINS = [
-  'hunt.town',
-  'nomadtask.com',
-  'steemhunt.com',
-  'dixel.club',
-  'mint.club',
-  'hrl.sh',
-  'barkapp.co',
-  'neverlose.money',
-  'pumpsea.io',
-  'hyped.club',
-  'sebayaki.com',
-  'signet.sebayaki.com'
+  "hunt.town",
+  "nomadtask.com",
+  "steemhunt.com",
+  "dixel.club",
+  "mint.club",
+  "hrl.sh",
+  "barkapp.co",
+  "neverlose.money",
+  "sebayaki.com",
+  "signet.sebayaki.com",
+  "onchat.sebayaki.com",
 ];
 const DISCORD_WEBHOOK_URL = process.env.DISCORD_WEBHOOK_URL;
 const port = 443;
@@ -28,11 +27,11 @@ const gracetime_days = 10;
 
 console.log(`---\nCheck all domains: ${format(new Date())}\n---`);
 
-LIST_OF_DOMAINS.forEach(domain => {
+LIST_OF_DOMAINS.forEach((domain) => {
   const options = {
     host: domain,
     port: port,
-    method: 'GET'
+    method: "GET",
   };
 
   const req = https.request(options, (response) => {
@@ -49,24 +48,29 @@ LIST_OF_DOMAINS.forEach(domain => {
         status = `WARNING - ${domain} - expires in ${remaining} days (on ${format(valid_to)})`;
       }
 
-      if (remaining < gracetime_days) { // Discord message will be sent for warning and critical status.
+      if (remaining < gracetime_days) {
+        // Discord message will be sent for warning and critical status.
         const payload = { content: status };
 
-        request.post(DISCORD_WEBHOOK_URL, {
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }, (error, response, body) => {
-          if (error) {
-            console.error(`Error sending to Discord: ${error}`);
-          }
-        });
+        request.post(
+          DISCORD_WEBHOOK_URL,
+          {
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          },
+          (error, response, body) => {
+            if (error) {
+              console.error(`Error sending to Discord: ${error}`);
+            }
+          },
+        );
       }
 
       console.log(status); // print status
     }
   });
 
-  req.on('error', (error) => {
+  req.on("error", (error) => {
     console.log(`Connection error: ${domain}`);
   });
 
