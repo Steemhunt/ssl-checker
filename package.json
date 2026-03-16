@@ -1,17 +1,17 @@
 {
   "name": "ssl-checker",
   "version": "1.0.0",
-  "description": "SSL cert expiration checker",
-  "main": "check-all-ssl.js",
+  "description": "SSL, URL, and wallet balance checker with Discord alerts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "daily": "node cron-daily.js",
+    "hourly": "node cron-hourly.js",
+    "deploy": "bash deploy/deploy.sh"
   },
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "dotenv": "^16.3.1",
-    "https": "^1.0.0",
+    "dotenv": "^17.3.1",
     "request": "^2.88.2",
-    "viem": "^2.45.0"
+    "viem": "^2.47.4"
   }
 }

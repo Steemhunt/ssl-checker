@@ -1,7 +1,44 @@
 # SSL Checker
-Check SSL expiry and send notifications to a Discord channel
 
-## Cronjob
+Monitors SSL certificates, URL availability, and wallet balances. Sends alerts to Discord.
+
+## Structure
+
 ```
-0 11 * * * cd ~/ssl-checker && node check-all-ssl.js >> ~/ssl-checker/cron.log 2>&1
+checks/
+  ssl.js       - SSL certificate expiration check
+  url.js       - URL availability check (status + response size)
+  wallet.js    - ERC20/ETH wallet balance check (Base chain)
+lib/
+  config.js    - Domains, wallets, RPC endpoints
+  notify.js    - Discord notification + helpers
+deploy/
+  deploy.sh    - Deploy to newtown server
+
+cron-daily.js  - SSL + wallet (run daily)
+cron-hourly.js - URL + wallet (run hourly)
 ```
+
+## Setup
+
+```bash
+cp .env.example .env   # add DISCORD_WEBHOOK_URL
+npm install
+```
+
+## Run locally
+
+```bash
+npm run daily
+npm run hourly
+```
+
+## Deploy
+
+```bash
+npm run deploy
+```
+
+Clones/pulls repo on `newtown:~/ssl-checker`, installs deps, copies `.env`, and sets up cron jobs:
+- **Daily (11:00 UTC)**: `cron-daily.js` - SSL certs + wallet balances
+- **Hourly**: `cron-hourly.js` - URL availability + wallet balances
