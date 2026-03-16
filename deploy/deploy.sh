@@ -44,7 +44,7 @@ fi
 echo "[4/4] Setting up cron jobs..."
 ssh $HOST "
   DAILY=\"0 11 * * * cd $DEPLOY_DIR && /root/.nvm/versions/node/v24.14.0/bin/node cron-daily.js >> $DEPLOY_DIR/cron-daily.log 2>&1\"
-  HOURLY=\"0 * * * * cd $DEPLOY_DIR && /root/.nvm/versions/node/v24.14.0/bin/node cron-hourly.js >> $DEPLOY_DIR/cron-hourly.log 2>&1\"
+  HOURLY=\"5 * * * * cd $DEPLOY_DIR && /root/.nvm/versions/node/v24.14.0/bin/node cron-hourly.js >> $DEPLOY_DIR/cron-hourly.log 2>&1\"
 
   CRON=\$(crontab -l 2>/dev/null || true)
   CHANGED=false
