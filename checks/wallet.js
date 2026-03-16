@@ -70,18 +70,19 @@ async function getBalance(wallet) {
 
 async function checkWallet(wallet) {
   const name = wallet.name || wallet.walletAddress.slice(0, 10) + "...";
+  const addr = wallet.walletAddress;
 
   try {
     const { balance, symbol } = await getBalance(wallet);
     const isLow = balance < wallet.lowBalanceThreshold;
     const status = isLow
-      ? `⚠️ LOW - ${name} - ${balance.toFixed(4)} ${symbol} (threshold: ${wallet.lowBalanceThreshold})`
-      : `OK - ${name} - ${balance.toFixed(4)} ${symbol}`;
+      ? `⚠️ LOW - ${name} (${addr}) - ${balance.toFixed(4)} ${symbol} (threshold: ${wallet.lowBalanceThreshold})`
+      : `OK - ${name} (${addr}) - ${balance.toFixed(4)} ${symbol}`;
 
     console.log(`[WALLET] ${status}`);
     if (isLow) await sendDiscord(`[WALLET] ${status}`);
   } catch (err) {
-    const status = `ERROR - ${name} - ${err.message}`;
+    const status = `ERROR - ${name} (${addr}) - ${err.message}`;
     console.error(`[WALLET] ${status}`);
     await sendDiscord(`[WALLET] ${status}`);
   }
