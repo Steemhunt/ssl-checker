@@ -9,9 +9,11 @@
   },
   "author": "",
   "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "dotenv": "^17.3.1",
-    "request": "^2.88.2",
     "viem": "^2.47.4"
   }
 }
