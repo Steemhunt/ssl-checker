@@ -4,7 +4,8 @@ const { format, sendDiscord } = require("../lib/notify");
 
 const GRACETIME_DAYS = 10;
 
-function checkDomain(domain) {
+function checkDomain(entry) {
+  const domain = typeof entry === "string" ? entry : entry.host;
   return new Promise((resolve) => {
     const req = https.request(
       { host: domain, port: 443, method: "GET" },

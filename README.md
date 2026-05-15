@@ -1,23 +1,31 @@
 # SSL Checker
 
-Monitors SSL certificates, URL availability, and wallet balances. Sends alerts to Discord.
+Monitors SSL certificates, URL availability, JSON API endpoints, and wallet balances. Sends alerts to Discord.
 
 ## Structure
 
 ```
 checks/
-  ssl.js       - SSL certificate expiration check
-  url.js       - URL availability check (status + response size)
+  ssl.js       - SSL certificate expiration (alerts < 10 days)
+  url.js       - HTTPS GET: 200 + size threshold + <title> + parking-page heuristic
+  api.js       - JSON endpoint health: 200 + JSON parse + expected key/value
   wallet.js    - ERC20/ETH wallet balance check (Base chain)
 lib/
-  config.js    - Domains, wallets, RPC endpoints
+  config.js    - DOMAINS, API_ENDPOINTS, WALLETS, RPC endpoints
   notify.js    - Discord notification + helpers
 deploy/
   deploy.sh    - Deploy to newtown server
 
-cron-daily.js  - SSL + wallet (run daily)
-cron-hourly.js - URL + wallet (run hourly)
+cron-daily.js  - SSL (run daily)
+cron-hourly.js - URL + API + wallet (run hourly)
 ```
+
+## Config
+
+`lib/config.js`:
+
+- **DOMAINS** — array of strings or `{ host, expectTitle? }` objects. Pure SPAs without server-rendered `<title>` (e.g. steemhunt.com) set `expectTitle: false`.
+- **API_ENDPOINTS** — array of `{ name, url, expectedKey, expectedValue? }`. JSON endpoint is healthy when content-type is JSON, body parses, and `expectedKey` exists (and matches `expectedValue` if given).
 
 ## Setup
 
